@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { fetchDB } from '../actions';
-import { Button, Paper, Stack, TextField } from '@mui/material';
+import { Paper, Stack } from '@mui/material';
 import { getTokens } from '@/utils/cookies';
 import { redirect } from 'next/navigation';
 import OrderTable from '@/components/OrderTable';
 import MenuLinkField from '@/components/MenuLinkField';
 import ResetBtn from '@/components/ResetBtn';
 
-export type AdminPageProps = {};
+export type AdminPageProps = object;
 
 const AdminPage: React.FC<AdminPageProps> = async ({}) => {
 	const { adminToken } = getTokens();

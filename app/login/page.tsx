@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import * as React from 'react';
 
-export type LoginPageProps = {};
+export type LoginPageProps = object;
 
 const LoginPage: React.FC<LoginPageProps> = async ({}) => {
 	const { adminToken } = getTokens();

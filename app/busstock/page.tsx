@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
 import * as React from 'react';
 
-export type BusStockPageProps = {};
+export type BusStockPageProps = object;
 
 const BusStockPage: React.FC<BusStockPageProps> = async ({}) => {
 	return (
