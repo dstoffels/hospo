@@ -2,7 +2,8 @@
 
 import { updateMenuLink } from '@/app/admin/actions';
 import { DB } from '@/app/types';
-import { TextField } from '@mui/material';
+import { Close } from '@mui/icons-material';
+import { IconButton, InputAdornment, TextField } from '@mui/material';
 import * as React from 'react';
 
 export type MenuLinkFieldProps = {
@@ -15,12 +16,12 @@ const MenuLinkField: React.FC<MenuLinkFieldProps> = ({ db }) => {
 	React.useEffect(() => {
 		const handler = setTimeout(() => {
 			if (menuLink !== db.menu_link) {
-				updateMenuLink(menuLink); // Call your update function after debouncing
+				updateMenuLink(menuLink);
 			}
-		}, 500); // 500ms debounce delay
+		}, 300);
 
 		return () => {
-			clearTimeout(handler); // Clear the timeout on each re-render
+			clearTimeout(handler);
 		};
 	}, [menuLink, db.menu_link]);
 
@@ -31,6 +32,17 @@ const MenuLinkField: React.FC<MenuLinkFieldProps> = ({ db }) => {
 			variant="standard"
 			name="menu_link"
 			label="Menu Link"
+			slotProps={{
+				input: {
+					endAdornment: (
+						<InputAdornment position="end">
+							<IconButton onClick={() => setMenuLink('')}>
+								<Close />
+							</IconButton>
+						</InputAdornment>
+					),
+				},
+			}}
 		/>
 	);
 };

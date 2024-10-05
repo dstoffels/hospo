@@ -15,7 +15,7 @@ export async function fetchDB() {
 
 		// Auto init db
 		if (!dataDoc) {
-			await addDoc(c, { menu_link: '', orders: [] });
+			await addDoc(c, { menu_link: '', orders: [], message: '', open: false });
 			return await fetchDB();
 		}
 

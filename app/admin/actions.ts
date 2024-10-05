@@ -24,6 +24,23 @@ export async function updateMenuLink(menuLink: string) {
 	revalidatePath('');
 }
 
+export async function updateMsg(message: string) {
+	const db = await fetchDB();
+
+	db.message = message;
+
+	await setDB(db);
+	revalidatePath('');
+}
+
+export async function toggleOpen() {
+	const db = await fetchDB();
+
+	db.open = !db.open;
+	await setDB(db);
+	revalidatePath('');
+}
+
 export async function resetDB() {
 	const db = await fetchDB();
 	db.orders = [];

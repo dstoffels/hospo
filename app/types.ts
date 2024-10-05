@@ -2,6 +2,8 @@ export type DB = {
 	id: string;
 	menu_link: string;
 	orders: order[];
+	message: string;
+	open: boolean;
 };
 
 export type order = {

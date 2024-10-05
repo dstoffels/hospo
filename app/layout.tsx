@@ -33,7 +33,7 @@ export default function RootLayout({
 			>
 				<header>
 					<div className="flex items-center">
-						<Image src="/images/elle-king-logo.png" width={250} height={250} alt="logo" />
+						<Image src="/images/elle-king-logo.png" width={250} height={250} alt="logo" priority />
 						<Typography variant="h5">Hospice</Typography>
 					</div>
 					<nav className="flex justify-around pb-2 px-1">
