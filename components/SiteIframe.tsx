@@ -3,7 +3,6 @@
 import { DB } from '@/app/types';
 import { Button, Paper, Typography } from '@mui/material';
 import * as React from 'react';
-import { useState, useEffect } from 'react';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 export type SiteIframeProps = {

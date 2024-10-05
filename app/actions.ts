@@ -2,8 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { DB } from './types';
-
-import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, updateDoc } from 'firebase/firestore';
 import { db } from '@/firebaseConfig';
 import { v4 } from 'uuid';
 
@@ -21,7 +20,7 @@ export async function fetchDB() {
 		}
 
 		return { ...dataDoc.data(), id: dataDoc.id } as DB;
-	} catch (error) {
+	} catch {
 		return await fetchDB();
 	}
 }

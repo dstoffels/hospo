@@ -1,10 +1,14 @@
 import { Typography } from '@mui/material';
 import * as React from 'react';
 
-export type BusStockPageProps = {};
+export type BusStockPageProps = object;
 
 const BusStockPage: React.FC<BusStockPageProps> = async ({}) => {
-	return <Typography variant="h4">Cuming Soon!</Typography>;
+	return (
+		<Typography variant="h4" align="center">
+			Cuming Soon!
+		</Typography>
+	);
 };
 
 export default BusStockPage;

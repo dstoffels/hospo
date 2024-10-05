@@ -2,7 +2,7 @@ import { fetchDB } from './actions';
 import SiteIframe from '@/components/SiteIframe';
 import OrderModal from '@/components/OrderModal';
 import { getTokens } from '@/utils/cookies';
-import { Button, Paper, Stack, Typography } from '@mui/material';
+import { Button, Paper, Stack } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import OrderTable from '@/components/OrderTable';
 
