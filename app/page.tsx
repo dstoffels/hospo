@@ -45,7 +45,7 @@ export default async function AftershowPage({}) {
 						</>
 					)}
 					{db.message && (
-						<Typography variant="body2" color="warning">
+						<Typography variant="body1" fontWeight={600} color="error">
 							{db.message}
 						</Typography>
 					)}

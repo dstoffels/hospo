@@ -1,7 +1,7 @@
 'use client';
 
 import { DB } from '@/app/types';
-import { Button, Paper, Typography } from '@mui/material';
+import { Button, Paper } from '@mui/material';
 import * as React from 'react';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
