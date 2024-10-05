@@ -1,7 +1,7 @@
 import { order } from '@/app/types';
 import * as React from 'react';
 import { IconButton, TableCell, TableRow, Typography } from '@mui/material';
-import CompleteCheckbox from '../CompleteCheckbox';
+import CompleteCheckbox from './CompleteCheckbox';
 import { getTokens } from '@/utils/cookies';
 import OrderModal from '../OrderModal';
 import { Edit } from '@mui/icons-material';
