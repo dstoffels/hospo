@@ -5,6 +5,7 @@ import { getTokens } from '@/utils/cookies';
 import { Button, Paper, Stack, Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import OrderTable from '@/components/OrderTable';
+import Page from '@/components/Page';
 
 export default async function AftershowPage({}) {
 	const { sessionId } = getTokens();
@@ -30,7 +31,7 @@ export default async function AftershowPage({}) {
 	const orders = db.orders.filter((o) => o.token === sessionId);
 
 	return (
-		<div className="flex-grow flex-col flex p-2">
+		<Page>
 			<Paper elevation={4} className="p-2 bg-slate-300">
 				<Stack spacing={1}>
 					{db.menu_link && db.open && (
@@ -52,6 +53,6 @@ export default async function AftershowPage({}) {
 				</Stack>
 			</Paper>
 			<SiteIframe db={db} canFrameSite={canFrameSite} />
-		</div>
+		</Page>
 	);
 }

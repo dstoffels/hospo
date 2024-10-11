@@ -1,28 +1,29 @@
 'use client';
 
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import { deleteOrder, submitOrder } from '@/app/actions';
-import { order } from '@/app/types';
-import { IconButton } from '@mui/material';
+import { stockItem } from '@/app/types';
 import { Close, Delete } from '@mui/icons-material';
+import {
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+	IconButton,
+	TextField,
+} from '@mui/material';
+import * as React from 'react';
 
-export type OrderModalProps = React.PropsWithChildren & {
-	existingOrder?: order;
+export type StockModalProps = React.PropsWithChildren & {
+	existingItem?: stockItem;
 	token: string;
 	btnTxt: string;
 };
 
-const OrderModal: React.FC<OrderModalProps> = ({ existingOrder, token, btnTxt, children }) => {
+const StockModal: React.FC<StockModalProps> = ({ children, existingItem, token, btnTxt }) => {
 	const [open, setOpen] = React.useState(false);
-	const [name, setName] = React.useState(existingOrder?.name || '');
-	const [order, setOrder] = React.useState(existingOrder?.order || '');
+	const [name, setName] = React.useState(existingItem?.name || '');
+	const [item, setItem] = React.useState(existingItem?.item || '');
 
 	const handleOpen = () => {
 		setOpen(true);
@@ -30,22 +31,22 @@ const OrderModal: React.FC<OrderModalProps> = ({ existingOrder, token, btnTxt, c
 
 	const handleClose = () => {
 		setName('');
-		setOrder('');
+		setItem('');
 		setOpen(false);
 	};
 
 	const handleSubmit = async (formData: FormData) => {
-		await submitOrder(formData);
+		formData.getAll('');
+		// await submitStockItem(formData);
 		handleClose();
 	};
 
 	const handleDelete = async () => {
-		if (existingOrder) {
-			await deleteOrder(existingOrder?.id);
+		if (existingItem) {
+			// await deleteStockItem(existingItem?.id);
 			handleClose();
 		}
 	};
-
 	return (
 		<>
 			<div onClick={handleOpen}>{children}</div>
@@ -59,7 +60,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ existingOrder, token, btnTxt, c
 			>
 				<DialogTitle className="flex justify-between items-center">
 					<div>Aftershow Order</div>
-					{existingOrder && (
+					{existingItem && (
 						<IconButton className="p-0" onClick={handleDelete} size="large">
 							<Delete className="text-3xl" color="error" />
 						</IconButton>
@@ -82,8 +83,8 @@ const OrderModal: React.FC<OrderModalProps> = ({ existingOrder, token, btnTxt, c
 						variant="standard"
 					/>
 					<TextField
-						value={order}
-						onChange={(e) => setOrder(e.target.value)}
+						value={item}
+						onChange={(e) => setItem(e.target.value)}
 						multiline
 						name="order"
 						label="Items"
@@ -91,7 +92,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ existingOrder, token, btnTxt, c
 						fullWidth
 					/>
 					<TextField className="hidden" type="hidden" hidden value={token} name="token" />
-					<TextField className="hidden" type="hidden" hidden value={existingOrder?.id} name="id" />
+					<TextField className="hidden" type="hidden" hidden value={existingItem?.id} name="id" />
 				</DialogContent>
 				<DialogActions>
 					<Button color="error" onClick={handleClose}>
@@ -104,4 +105,4 @@ const OrderModal: React.FC<OrderModalProps> = ({ existingOrder, token, btnTxt, c
 	);
 };
 
-export default OrderModal;
+export default StockModal;
