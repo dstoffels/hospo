@@ -13,3 +13,9 @@ export type order = {
 	completed: boolean;
 	id: string;
 };
+
+export type stockItem = {
+	id: string;
+	name: string;
+	token: string;
+};

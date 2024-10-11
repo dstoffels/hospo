@@ -8,6 +8,7 @@ import MenuLinkField from '@/components/lib/MenuLinkField';
 import ResetBtn from '@/components/lib/ResetBtn';
 import MessageField from '@/components/lib/MessageField';
 import OpenSwitch from '@/components/lib/OpenSwitch';
+import Page from '@/components/Page';
 
 export type AdminPageProps = object;
 
@@ -21,7 +22,7 @@ const AdminPage: React.FC<AdminPageProps> = async ({}) => {
 	const db = await fetchDB();
 
 	return (
-		<div className="flex-grow flex-col flex p-2">
+		<Page>
 			<div className="flex my-3">
 				<Paper className="p-2 w-full">
 					<Stack spacing={2}>
@@ -33,7 +34,7 @@ const AdminPage: React.FC<AdminPageProps> = async ({}) => {
 			</div>
 			<OrderTable orders={db.orders} heading="Orders" />
 			<ResetBtn />
-		</div>
+		</Page>
 	);
 };
 
