@@ -17,5 +17,6 @@ export type order = {
 export type stockItem = {
 	id: string;
 	name: string;
+	item: string;
 	token: string;
 };

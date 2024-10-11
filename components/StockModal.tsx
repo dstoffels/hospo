@@ -1,6 +1,6 @@
 'use client';
 
-import { DB, stockItem } from '@/app/types';
+import { stockItem } from '@/app/types';
 import { Close, Delete } from '@mui/icons-material';
 import {
 	Button,
@@ -20,10 +20,10 @@ export type StockModalProps = React.PropsWithChildren & {
 	btnTxt: string;
 };
 
-const StockModal: React.FC<StockModalProps> = async ({ children, existingItem, token, btnTxt }) => {
+const StockModal: React.FC<StockModalProps> = ({ children, existingItem, token, btnTxt }) => {
 	const [open, setOpen] = React.useState(false);
-	const [name, setName] = React.useState(existingOrder?.name || '');
-	const [item, setItem] = React.useState(existingOrder?.order || '');
+	const [name, setName] = React.useState(existingItem?.name || '');
+	const [item, setItem] = React.useState(existingItem?.item || '');
 
 	const handleOpen = () => {
 		setOpen(true);
@@ -36,13 +36,14 @@ const StockModal: React.FC<StockModalProps> = async ({ children, existingItem, t
 	};
 
 	const handleSubmit = async (formData: FormData) => {
-		await submitStockItem(formData);
+		formData.getAll('');
+		// await submitStockItem(formData);
 		handleClose();
 	};
 
 	const handleDelete = async () => {
 		if (existingItem) {
-			await deleteStockItem(existingItem?.id);
+			// await deleteStockItem(existingItem?.id);
 			handleClose();
 		}
 	};
@@ -90,8 +91,8 @@ const StockModal: React.FC<StockModalProps> = async ({ children, existingItem, t
 						variant="standard"
 						fullWidth
 					/>
-					<TextField hidden value={token} name="token" />
-					<TextField hidden value={existingItem?.id} name="id" />
+					<TextField className="hidden" type="hidden" hidden value={token} name="token" />
+					<TextField className="hidden" type="hidden" hidden value={existingItem?.id} name="id" />
 				</DialogContent>
 				<DialogActions>
 					<Button color="error" onClick={handleClose}>
