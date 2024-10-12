@@ -29,8 +29,10 @@ const OrderModal: React.FC<OrderModalProps> = ({ existingOrder, token, btnTxt, c
 	};
 
 	const handleClose = () => {
-		setName('');
-		setOrder('');
+		if (!existingOrder) {
+			setName('');
+			setOrder('');
+		}
 		setOpen(false);
 	};
 

@@ -9,7 +9,7 @@ export type OrderTableProps = {
 };
 
 const OrderTable: React.FC<OrderTableProps> = async ({ orders, heading }) => {
-	const rows = orders.map((o) => <OrderRow key={o.id} order={o} />);
+	const rows = orders.map((o, i) => <OrderRow key={o.id} order={o} i={i} />);
 
 	return (
 		orders.length > 0 && (
