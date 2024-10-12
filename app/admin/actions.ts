@@ -41,6 +41,14 @@ export async function toggleOpen() {
 	revalidatePath('');
 }
 
+export async function toggleLink() {
+	const db = await fetchDB();
+
+	db.useLink = !db.useLink;
+	await setDB(db);
+	revalidatePath('');
+}
+
 export async function resetDB() {
 	const db = await fetchDB();
 	db.orders = [];

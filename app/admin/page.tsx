@@ -9,6 +9,7 @@ import ResetBtn from '@/components/lib/ResetBtn';
 import MessageField from '@/components/lib/MessageField';
 import OpenSwitch from '@/components/lib/OpenSwitch';
 import Page from '@/components/Page';
+import LinkSwitch from '@/components/lib/LinkSwitch';
 
 export type AdminPageProps = object;
 
@@ -27,6 +28,7 @@ const AdminPage: React.FC<AdminPageProps> = async ({}) => {
 				<Paper className="p-2 w-full">
 					<Stack spacing={2}>
 						<OpenSwitch db={db} />
+						<LinkSwitch db={db} />
 						<MenuLinkField db={db} />
 						<MessageField db={db} />
 					</Stack>

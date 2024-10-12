@@ -4,6 +4,7 @@ export type DB = {
 	orders: order[];
 	message: string;
 	open: boolean;
+	useLink: boolean;
 };
 
 export type order = {
