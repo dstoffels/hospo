@@ -8,15 +8,21 @@ import { Edit } from '@mui/icons-material';
 
 export type OrderRowProps = {
 	order: order;
+	i: number;
 };
 
-const OrderRow: React.FC<OrderRowProps> = async ({ order }) => {
+const OrderRow: React.FC<OrderRowProps> = async ({ order, i }) => {
 	const { adminToken, sessionId } = getTokens();
 	const isAdmin = adminToken === process.env.TOKEN;
 	const isOwner = sessionId === order.token;
 
 	return (
 		<TableRow key={order.token} className="">
+			{isAdmin && (
+				<TableCell align="left">
+					<Typography>{i + 1}</Typography>
+				</TableCell>
+			)}
 			<TableCell align="left">
 				<Typography>{order.name}</Typography>
 			</TableCell>

@@ -28,7 +28,7 @@ export async function fetchDB() {
 export async function setDB(rawDB: DB) {
 	const dataDoc = doc(db, `aftershow/${rawDB.id}`);
 	await updateDoc(dataDoc, rawDB);
-	// await fetchDB();
+	await fetchDB();
 	revalidatePath('');
 }
 
@@ -48,17 +48,18 @@ export async function submitOrder(formData: FormData) {
 	const name = formData.get('name') as string;
 	const order = formData.get('order') as string;
 	const token = formData.get('token') as string;
-	const id = formData.get('id') as string;
+	const id = (formData.get('id') as string) || v4();
 
 	const db = await fetchDB();
 
 	const i = db.orders.findIndex((order) => order.id === id);
-	const newOrder = { name, order, token, completed: false, id: v4() };
+	const newOrder = { name, order, token, completed: false, id };
 
 	if (i > -1) db.orders[i] = newOrder;
 	else db.orders.push(newOrder);
 
 	await setDB(db);
+	await fetchDB();
 	revalidatePath('');
 }
 

@@ -7,7 +7,7 @@ import { order } from '../types';
 export async function completeOrder(order: order) {
 	const db = await fetchDB();
 
-	const i = db.orders.findIndex(({ token }) => token === order.token);
+	const i = db.orders.findIndex(({ id }) => id === order.id);
 
 	db.orders[i].completed = !db.orders[i].completed;
 
