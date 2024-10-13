@@ -16,7 +16,7 @@ const OrderTable: React.FC<OrderTableProps> = async ({ orders, heading }) => {
 			<div>
 				<Typography variant="h6">{heading}</Typography>
 				<TableContainer component={Paper} elevation={12} className="bg-gray-100">
-					<Table>
+					<Table size="small" padding="none">
 						<TableBody>{rows}</TableBody>
 					</Table>
 				</TableContainer>

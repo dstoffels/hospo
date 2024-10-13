@@ -19,14 +19,14 @@ const OrderRow: React.FC<OrderRowProps> = async ({ order, i }) => {
 	return (
 		<TableRow key={order.token} className="">
 			{isAdmin && (
-				<TableCell align="left">
+				<TableCell align="left" padding="checkbox">
 					<Typography>{i + 1}</Typography>
 				</TableCell>
 			)}
-			<TableCell align="left">
+			<TableCell align="left" padding="checkbox">
 				<Typography>{order.name}</Typography>
 			</TableCell>
-			<TableCell align="justify">{order.order}</TableCell>
+			<TableCell align="right">{order.order}</TableCell>
 			{(isAdmin || isOwner) && (
 				<TableCell align="right">
 					<OrderModal btnTxt="Update Order" token={sessionId} existingOrder={order}>
