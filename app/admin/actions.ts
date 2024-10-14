@@ -2,9 +2,9 @@
 
 import { revalidatePath } from 'next/cache';
 import { fetchDB, setDB } from '../actions';
-import { order } from '../types';
+import { Order } from '../types';
 
-export async function completeOrder(order: order) {
+export async function completeOrder(order: Order) {
 	const db = await fetchDB();
 
 	const i = db.orders.findIndex(({ id }) => id === order.id);

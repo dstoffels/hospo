@@ -1,6 +1,6 @@
 'use client';
 
-import { stockItem } from '@/app/types';
+import { StockItem } from '@/app/types';
 import { Close, Delete } from '@mui/icons-material';
 import {
 	Button,
@@ -15,7 +15,7 @@ import {
 import * as React from 'react';
 
 export type StockModalProps = React.PropsWithChildren & {
-	existingItem?: stockItem;
+	existingItem?: StockItem;
 	token: string;
 	btnTxt: string;
 };

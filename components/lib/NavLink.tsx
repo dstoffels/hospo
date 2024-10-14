@@ -17,8 +17,8 @@ const NavLink: React.FC<NavLinkProps> = ({ children, href }) => {
 	const highlight = isPath ? 'bg-white/10 border border-gray-700' : '';
 
 	return (
-		<Link className={`py-1 w-full text-center ${highlight} rounded-sm`} href={href}>
-			<Typography color={isPath ? '' : 'info'} variant="h6">
+		<Link className={` w-full text-center ${highlight} rounded-sm`} href={href}>
+			<Typography color={isPath ? '' : 'info'} variant="overline">
 				{children}
 			</Typography>
 		</Link>

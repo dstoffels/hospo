@@ -1,4 +1,4 @@
-import { order } from '@/app/types';
+import { Order } from '@/app/types';
 import * as React from 'react';
 import { IconButton, TableCell, TableRow, Typography } from '@mui/material';
 import CompleteCheckbox from './CompleteCheckbox';
@@ -7,17 +7,17 @@ import OrderModal from '../OrderModal';
 import { Edit } from '@mui/icons-material';
 
 export type OrderRowProps = {
-	order: order;
+	order: Order;
 	i: number;
 };
 
 const OrderRow: React.FC<OrderRowProps> = async ({ order, i }) => {
 	const { adminToken, sessionId } = getTokens();
 	const isAdmin = adminToken === process.env.TOKEN;
-	const isOwner = sessionId === order.token;
+	const isOwner = sessionId === order.sessionId;
 
 	return (
-		<TableRow key={order.token} className="">
+		<TableRow key={order.sessionId} className="">
 			{isAdmin && (
 				<TableCell align="left" padding="checkbox">
 					<Typography>{i + 1}</Typography>

@@ -9,12 +9,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { deleteOrder, submitOrder } from '@/app/actions';
-import { order } from '@/app/types';
+import { Order } from '@/app/types';
 import { IconButton } from '@mui/material';
 import { Close, Delete } from '@mui/icons-material';
 
 export type OrderModalProps = React.PropsWithChildren & {
-	existingOrder?: order;
+	existingOrder?: Order;
 	token: string;
 	btnTxt: string;
 };

@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import Image from 'next/image';
-import { Typography } from '@mui/material';
-import NavLink from '@/components/lib/NavLink';
+import Nav from '@/components/Nav';
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
+import Header from '@/components/Header';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import theme from '@/utils/theme';
 
 const geistSans = localFont({
 	src: './fonts/GeistVF.woff',
@@ -31,18 +33,14 @@ export default function RootLayout({
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
 			>
-				<header>
-					<div className="flex items-center">
-						<Image src="/images/elle-king-logo.png" width={250} height={250} alt="logo" priority />
-						<Typography variant="h5">Hospice</Typography>
-					</div>
-					<nav className="flex justify-around pb-2 px-1">
-						<NavLink href="/">Aftershow</NavLink>
-						<NavLink href="/busstock">Bus Stock</NavLink>
-						<NavLink href="/admin">Admin</NavLink>
-					</nav>
-				</header>
-				<main className="flex-grow flex flex-col h-full">{children}</main>
+				<AppRouterCacheProvider>
+					<ThemeProvider theme={theme}>
+						<CssBaseline />
+						<Header />
+						<main className="flex-grow flex flex-col h-full">{children}</main>
+						<Nav />
+					</ThemeProvider>
+				</AppRouterCacheProvider>
 			</body>
 		</html>
 	);

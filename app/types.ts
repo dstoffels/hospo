@@ -1,23 +1,44 @@
-export type DB = {
-	id: string;
-	menu_link: string;
-	orders: order[];
+// Databases
+export type FoodDB = {
+	menuLinks: MenuLink[];
+	orders: Order[];
 	message: string;
 	open: boolean;
-	useLink: boolean;
 };
 
-export type order = {
+export type BusStockDB = {
+	buses: Bus[];
+	message: string;
+};
+
+export type MainDB = {
+	message: string;
+	users: User[];
+};
+
+export type DBname = 'food' | 'busstock' | 'main';
+
+// Models
+export type Model = {
+	id: string;
 	name: string;
+};
+export type User = Model & {
+	sessions: string[];
+};
+
+export type Bus = Model & {
+	stock: Order[];
+};
+
+export type Order = {
+	id: string;
+	user: User;
 	order: string;
-	token: string;
-	completed: boolean;
-	id: string;
+	fulfilled: boolean;
 };
 
-export type stockItem = {
-	id: string;
-	name: string;
-	item: string;
-	token: string;
+export type MenuLink = {
+	url: string;
+	useIframe: boolean;
 };

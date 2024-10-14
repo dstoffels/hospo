@@ -6,8 +6,8 @@ export function middleware(req: NextRequest) {
 
 	const res = NextResponse.next();
 	if (!sessionCookie) {
-		const token = v4();
-		res.cookies.set('session', token, {
+		const userId = v4();
+		res.cookies.set('session', userId, {
 			maxAge: 60 * 60 * 24 * 365 * 100, // 100 year token
 			path: '/',
 		});

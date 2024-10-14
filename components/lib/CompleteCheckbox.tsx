@@ -1,16 +1,16 @@
 'use client';
 
 import { completeOrder } from '@/app/admin/actions';
-import { order } from '@/app/types';
+import { Order } from '@/app/types';
 import { Checkbox } from '@mui/material';
 import * as React from 'react';
 
 export type CompleteCheckboxProps = {
-	order: order;
+	order: Order;
 };
 
 const CompleteCheckbox: React.FC<CompleteCheckboxProps> = ({ order }) => {
-	return <Checkbox checked={order.completed} onChange={() => completeOrder(order)} />;
+	return <Checkbox checked={order.fulfilled} onChange={() => completeOrder(order)} />;
 };
 
 export default CompleteCheckbox;

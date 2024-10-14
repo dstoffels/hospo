@@ -1,58 +1,25 @@
-import { fetchDB } from './actions';
-import SiteIframe from '@/components/SiteIframe';
-import OrderModal from '@/components/OrderModal';
-import { getTokens } from '@/utils/cookies';
-import { Button, Paper, Stack, Typography } from '@mui/material';
-import { Add } from '@mui/icons-material';
-import OrderTable from '@/components/OrderTable';
+import Column from '@/components/lib/Column';
 import Page from '@/components/Page';
+import UserSelect from '@/components/UserSelect';
+import { getTokens } from '@/utils/cookies';
+import { fetchMainDB } from '@/utils/db';
+import { Paper, Typography } from '@mui/material';
 
-export default async function AftershowPage({}) {
+export default async function HomePage({}) {
+	const { message, users } = await fetchMainDB();
+
 	const { sessionId } = getTokens();
 
-	const db = await fetchDB();
-
-	const validateIframe = async () => {
-		'use server';
-		if (db.menu_link) {
-			try {
-				const res = await fetch(db.menu_link, { method: 'HEAD' });
-				return !Boolean(res.headers.get('content-security-policy')?.includes('frame-ancestors'));
-			} catch (error) {
-				console.log('fetch error', error);
-				return false;
-			}
-		}
-		return false;
-	};
-
-	const canFrameSite = await validateIframe();
-
-	const orders = db.orders.filter((o) => o.token === sessionId);
+	const user = users.find((u) => u.sessions.includes(sessionId));
 
 	return (
-		<Page>
-			<Paper elevation={4} className="p-2 bg-slate-300">
-				<Stack spacing={1}>
-					{db.menu_link && db.open && (
-						<>
-							<OrderTable heading="My Items" orders={orders} />
-							<OrderModal btnTxt="Add Order" token={sessionId as string}>
-								<Button variant="contained" color="primary" size="large" className="w-full">
-									<span>Add Your Order </span>
-									<Add />
-								</Button>
-							</OrderModal>
-						</>
-					)}
-					{db.message && (
-						<Typography variant="body1" fontWeight={600} color="error">
-							{db.message}
-						</Typography>
-					)}
-				</Stack>
-			</Paper>
-			<SiteIframe db={db} canFrameSite={canFrameSite} />
+		<Page className="flex flex-col flex-grow">
+			<Column className="">
+				<UserSelect sessionId={sessionId} users={users} user={user} />
+				<Paper elevation={2} className="p-1">
+					<Typography color="textDisabled">{message}</Typography>
+				</Paper>
+			</Column>
 		</Page>
 	);
 }
