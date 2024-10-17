@@ -1,4 +1,4 @@
-import { getTokens } from '@/utils/cookies';
+import { auth } from '@/utils/auth';
 import { Button, Paper, TextField, Typography } from '@mui/material';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -7,19 +7,23 @@ import * as React from 'react';
 export type LoginPageProps = object;
 
 const LoginPage: React.FC<LoginPageProps> = async ({}) => {
-	const { adminToken } = getTokens();
+	const { adminToken } = await auth();
 
 	if (adminToken === process.env.TOKEN) redirect('/admin');
 
 	const handleLogin = async (formData: FormData) => {
 		'use server';
+
 		const password = formData.get('password');
+
 		if (password === process.env.ADMIN_PW) {
 			const cookieStore = cookies();
+
 			cookieStore.set('admin', process.env.TOKEN as string, {
 				maxAge: 60 * 60 * 24 * 365 * 100, // 100 year token
 				path: '/',
 			});
+
 			redirect('/admin');
 		}
 	};

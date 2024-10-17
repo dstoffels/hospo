@@ -2,7 +2,7 @@ import { Order } from '@/app/types';
 import * as React from 'react';
 import { IconButton, TableCell, TableRow, Typography } from '@mui/material';
 import CompleteCheckbox from './CompleteCheckbox';
-import { getTokens } from '@/utils/cookies';
+import { auth } from '@/utils/auth';
 import OrderModal from '../OrderModal';
 import { Edit } from '@mui/icons-material';
 
@@ -12,7 +12,7 @@ export type OrderRowProps = {
 };
 
 const OrderRow: React.FC<OrderRowProps> = async ({ order, i }) => {
-	const { adminToken, sessionId } = getTokens();
+	const { adminToken, sessionId } = auth();
 	const isAdmin = adminToken === process.env.TOKEN;
 	const isOwner = sessionId === order.sessionId;
 

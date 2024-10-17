@@ -1,44 +1,62 @@
 'use client';
 
-import { DB } from '@/app/types';
-import { Button, Paper } from '@mui/material';
+import { MenuLinkType } from '@/app/types';
+import { Button, MenuItem, Paper, Select, Typography } from '@mui/material';
 import * as React from 'react';
+import { useState } from 'react';
+
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import Panel from './lib/Panel';
+import MenuSelect from './lib/MenuSelect';
+import Image from 'next/image';
+import Column from './lib/Column';
 
 export type SiteIframeProps = {
-	db: DB;
-	canFrameSite: boolean;
+	menuLinks: MenuLinkType[];
 };
 
-const SiteIframe: React.FC<SiteIframeProps> = ({ db, canFrameSite }) => {
-	const useFrame = canFrameSite && !db.useLink;
+const SiteIframe: React.FC<SiteIframeProps> = ({ menuLinks }) => {
+	const [menuLink, setMenuLink] = useState<MenuLinkType | null>(menuLinks[0] || null);
+
+	const handleChange = (e: any) => {
+		const selected = menuLinks.find(({ title }) => title === e.target.value);
+		setMenuLink(selected || null);
+	};
 
 	return (
-		db.menu_link && (
-			<Paper className="w-full h-full flex-grow flex flex-col mt-1 p-2">
-				{useFrame ? (
-					<iframe
-						id="menu-iframe"
-						src={db.menu_link + '?nocache=' + Date.now()}
-						className={`w-full h-full flex-grow`}
-						sandbox="allow-scripts allow-same-origin"
-					></iframe>
-				) : (
-					<a
-						className={`w-full h-full flex flex-col justify-center mt-2 ${
-							useFrame ? 'hidden' : ''
-						}`}
-						href={db.menu_link}
-						target="_blank"
-					>
-						<Button fullWidth variant="contained" size="large">
-							<span className="mr-2">Open Menu</span>
-							<OpenInNewIcon />
-						</Button>
-					</a>
-				)}
-			</Paper>
-		)
+		<Column>
+			<MenuSelect value={menuLink?.title} menuLinks={menuLinks} onChange={handleChange} />
+			{menuLink?.useIframe ? (
+				<iframe
+					id="menu-iframe"
+					src={menuLink.url + '?nocache=' + Date.now()}
+					className="flex-grow relative"
+					sandbox="allow-scripts allow-same-origin allow-modals allow-top-navigation-by-user-activation allow-popups allow-popups-to-escape-sandbox"
+				></iframe>
+			) : (
+				<a href={menuLink?.url} target="_blank" className="flex flex-col flex-grow justify-center">
+					<Panel>
+						<div className="flex justify-between mb-2">
+							<div className="flex space-x-2 items-center overflow-hidden">
+								{menuLink?.favicon && (
+									<img src={menuLink?.favicon} alt="" style={{ height: '1rem' }} />
+								)}
+								<Typography
+									className="whitespace-nowrap overflow-hidden text-ellipsis"
+									color="textDisabled"
+									variant="caption"
+								>
+									{menuLink?.title}
+								</Typography>
+							</div>
+							<OpenInNewIcon color="info" />
+						</div>
+						{menuLink?.thumbnail && <img className="mb-2" src={menuLink?.thumbnail} alt="" />}
+						<Typography color="textDisabled">{menuLink?.description}</Typography>
+					</Panel>
+				</a>
+			)}
+		</Column>
 	);
 };
 

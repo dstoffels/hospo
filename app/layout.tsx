@@ -6,6 +6,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 import Header from '@/components/Header';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import theme from '@/utils/theme';
+import { auth } from '@/utils/auth';
 
 const geistSans = localFont({
 	src: './fonts/GeistVF.woff',
@@ -23,11 +24,13 @@ export const metadata: Metadata = {
 	description: 'Created by Dan-O',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const { user } = await auth();
+
 	return (
 		<html lang="en">
 			<body
@@ -38,7 +41,7 @@ export default function RootLayout({
 						<CssBaseline />
 						<Header />
 						<main className="flex-grow flex flex-col h-full">{children}</main>
-						<Nav />
+						<Nav user={user} />
 					</ThemeProvider>
 				</AppRouterCacheProvider>
 			</body>

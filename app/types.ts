@@ -1,6 +1,6 @@
 // Databases
 export type FoodDB = {
-	menuLinks: MenuLink[];
+	menuLinks: MenuLinkType[];
 	orders: Order[];
 	message: string;
 	open: boolean;
@@ -38,7 +38,11 @@ export type Order = {
 	fulfilled: boolean;
 };
 
-export type MenuLink = {
+export type MenuLinkType = {
 	url: string;
 	useIframe: boolean;
+	title: string;
+	description: string;
+	favicon: string;
+	thumbnail: string;
 };

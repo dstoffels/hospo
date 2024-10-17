@@ -14,13 +14,14 @@ export type UserSelectProps = {
 };
 
 const UserSelect: React.FC<UserSelectProps> = ({ sessionId, users, user }) => {
+	const [anchor, setAnchor] = useState<HTMLButtonElement | null>(null);
 	const [showSelect, setShowSelect] = useState(!Boolean(user));
 	const [selectedUser, setSelectedUser] = useState<User | null>(user || null);
 
 	useEffect(() => {
-		if (selectedUser) setUser(selectedUser as User, sessionId);
+		if (selectedUser && selectedUser.id !== user?.id) setUser(selectedUser as User, sessionId);
 		setShowSelect(!user);
-	}, [selectedUser]);
+	}, [selectedUser, user]);
 
 	const newId = v4();
 
@@ -29,11 +30,13 @@ const UserSelect: React.FC<UserSelectProps> = ({ sessionId, users, user }) => {
 	const handleChange = (e: React.SyntheticEvent<Element, Event>, newVal: UserOption | null) => {
 		if (newVal) {
 			if (newVal.inputValue) {
+				// create new user
 				const { inputValue, ...props } = newVal;
 				const newUser = { ...props, name: newVal.inputValue };
 				setSelectedUser(newUser);
 			} else {
-				const newUser = { ...newVal, sessions: [sessionId] } as User;
+				// select existing user
+				const newUser = { ...newVal, sessions: [...newVal.sessions, sessionId] } as User;
 				setSelectedUser(newUser);
 			}
 		}
@@ -41,22 +44,17 @@ const UserSelect: React.FC<UserSelectProps> = ({ sessionId, users, user }) => {
 
 	return (
 		<div>
-			<div className="mb-2">
-				{user ? (
-					!showSelect && (
-						<div className="flex justify-between items-end">
-							<Typography variant="h4">Hi {user.name}!</Typography>
-							<Typography onClick={() => setShowSelect(true)} color="primary" variant="caption">
-								I'm not {user.name}!
-							</Typography>
-						</div>
-					)
-				) : (
-					<Typography variant="caption" color="error">
-						Ope, I don't recognize this device, select or add your name below.
+			{user ? (
+				!showSelect && (
+					<Typography onClick={() => setShowSelect(true)} color="primary" variant="caption">
+						Not {user.name}?
 					</Typography>
-				)}
-			</div>
+				)
+			) : (
+				<Typography variant="caption" color="error">
+					Ope, I don't recognize this device, select or add your name below.
+				</Typography>
+			)}
 
 			{showSelect && (
 				<Autocomplete

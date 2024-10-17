@@ -1,40 +1,43 @@
 import * as React from 'react';
-import { fetchDB } from '../actions';
 import { Paper, Stack } from '@mui/material';
-import { getTokens } from '@/utils/cookies';
+import { auth } from '@/utils/auth';
 import { redirect } from 'next/navigation';
 import OrderTable from '@/components/OrderTable';
-import MenuLinkField from '@/components/lib/MenuLinkField';
+// import MenuLinkField from '@/components/lib/MenuLinkField';
 import ResetBtn from '@/components/lib/ResetBtn';
 import MessageField from '@/components/lib/MessageField';
-import OpenSwitch from '@/components/lib/OpenSwitch';
+
 import Page from '@/components/Page';
 import LinkSwitch from '@/components/lib/LinkSwitch';
+import OrderingSwitch from '@/components/lib/OrderingSwitch';
+import { fetchFoodDB } from '@/utils/db';
+import MenuLinks from '@/components/MenuLinks';
 
 export type AdminPageProps = object;
 
 const AdminPage: React.FC<AdminPageProps> = async ({}) => {
-	const { adminToken } = getTokens();
+	const { adminToken } = await auth();
 
 	if (adminToken !== process.env.TOKEN) {
 		redirect('/login');
 	}
 
-	const db = await fetchDB();
+	const db = await fetchFoodDB();
 
 	return (
 		<Page>
 			<div className="flex my-3">
 				<Paper className="p-2 w-full">
 					<Stack spacing={2}>
-						<OpenSwitch db={db} />
-						<LinkSwitch db={db} />
-						<MenuLinkField db={db} />
-						<MessageField db={db} />
+						<OrderingSwitch checked={db.open} />
+						<MenuLinks />
+						{/* <LinkSwitch db={db} /> */}
+						{/* <MenuLinkField db={db} /> */}
+						{/* <MessageField db={db} /> */}
 					</Stack>
 				</Paper>
 			</div>
-			<OrderTable orders={db.orders} heading="Orders" />
+			{/* <OrderTable orders={db.orders} heading="Orders" /> */}
 			<ResetBtn />
 		</Page>
 	);
