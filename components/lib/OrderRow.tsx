@@ -1,10 +1,11 @@
-import { Order } from '@/app/types';
+import { Order, User } from '@/app/types';
 import * as React from 'react';
-import { IconButton, TableCell, TableRow, Typography } from '@mui/material';
+import { TableCell, TableRow, Typography } from '@mui/material';
 import CompleteCheckbox from './CompleteCheckbox';
 import { auth } from '@/utils/auth';
-import OrderModal from '../OrderModal';
-import { Edit } from '@mui/icons-material';
+import OrderForm from '../OrderForm';
+import EditBtn from './EditBtn';
+import { fetchMainDB } from '@/utils/db';
 
 export type OrderRowProps = {
 	order: Order;
@@ -12,28 +13,34 @@ export type OrderRowProps = {
 };
 
 const OrderRow: React.FC<OrderRowProps> = async ({ order, i }) => {
-	const { adminToken, sessionId } = auth();
+	const { adminToken, sessionId, user } = await auth();
 	const isAdmin = adminToken === process.env.TOKEN;
-	const isOwner = sessionId === order.sessionId;
+	const isOwner = user?.id === order.user.id;
+
+	const { users } = await fetchMainDB();
 
 	return (
-		<TableRow key={order.sessionId} className="">
+		<TableRow key={order.id} className="">
 			{isAdmin && (
 				<TableCell align="left" padding="checkbox">
 					<Typography>{i + 1}</Typography>
 				</TableCell>
 			)}
-			<TableCell align="left" padding="checkbox">
-				<Typography>{order.name}</Typography>
+			<TableCell sx={{ padding: 0.5 }}>
+				<Typography fontWeight={600} noWrap>
+					{order.user.name}
+				</Typography>
 			</TableCell>
-			<TableCell align="right">{order.order}</TableCell>
+			<TableCell sx={{ width: '100%', padding: 0.5 }}>{order.order}</TableCell>
 			{(isAdmin || isOwner) && (
 				<TableCell align="right">
-					<OrderModal btnTxt="Update Order" token={sessionId} existingOrder={order}>
-						<IconButton>
-							<Edit />
-						</IconButton>
-					</OrderModal>
+					<OrderForm
+						MainButton={EditBtn}
+						sessionId={sessionId}
+						user={user as User}
+						users={users}
+						existingOrder={order}
+					/>
 				</TableCell>
 			)}
 			{isAdmin && (

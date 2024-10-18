@@ -34,5 +34,5 @@ export async function fetchBusDB() {
 export async function setDB(dbName: DBname, rawDB: FoodDB | BusStockDB | MainDB) {
 	const docRef = doc(db, `ek-hospice/${dbName}`);
 	await setDoc(docRef, rawDB);
-	revalidatePath('');
+	// revalidatePath('');
 }
