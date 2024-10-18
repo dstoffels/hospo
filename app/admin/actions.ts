@@ -1,8 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-// import { fetchDB, setDB } from '../actions';
-import { MenuLinkType, Order } from '../types';
+import { MenuLinkType } from '../types';
 import { fetchFoodDB, setDB } from '@/utils/db';
 import * as cheerio from 'cheerio';
 
@@ -110,7 +109,7 @@ async function fetchMeta(url: string) {
 		}
 
 		return { title, description, thumbnail, favicon };
-	} catch (error) {
+	} catch {
 		return { title: '', description: '', thumbnail: '', favicon: '' };
 	}
 }

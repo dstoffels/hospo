@@ -8,7 +8,7 @@ import { User } from '../types';
 import { Button, Typography } from '@mui/material';
 import OrderTable from '@/components/OrderTable';
 
-export type FoodPageProps = {};
+export type FoodPageProps = object;
 
 const FoodPage: React.FC<FoodPageProps> = async ({}) => {
 	const { sessionId, user } = await auth();

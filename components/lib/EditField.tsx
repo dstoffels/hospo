@@ -7,12 +7,11 @@ import { useState } from 'react';
 
 export type EditFieldProps = TextFieldProps &
 	React.PropsWithChildren & {
-		open?: boolean;
-		onDelete?: () => any;
-		onEdit?: () => any;
+		onDelete?: () => void;
+		onEdit?: () => void;
 	};
 
-const EditField: React.FC<EditFieldProps> = ({ open, onDelete, onEdit, children, ...props }) => {
+const EditField: React.FC<EditFieldProps> = ({ onDelete, onEdit, children, ...props }) => {
 	const [editing, setEditing] = useState(Boolean(!props.value));
 
 	const handleEditing = () => {

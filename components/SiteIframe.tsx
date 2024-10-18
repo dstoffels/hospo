@@ -1,14 +1,13 @@
 'use client';
 
 import { MenuLinkType } from '@/app/types';
-import { Button, MenuItem, Paper, Select, Typography } from '@mui/material';
+import { SelectChangeEvent, Typography } from '@mui/material';
 import * as React from 'react';
 import { useState } from 'react';
 
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import Panel from './lib/Panel';
 import MenuSelect from './lib/MenuSelect';
-import Image from 'next/image';
 import Column from './lib/Column';
 
 export type SiteIframeProps = {
@@ -18,7 +17,7 @@ export type SiteIframeProps = {
 const SiteIframe: React.FC<SiteIframeProps> = ({ menuLinks }) => {
 	const [menuLink, setMenuLink] = useState<MenuLinkType | null>(menuLinks[0] || null);
 
-	const handleChange = (e: any) => {
+	const handleChange = (e: SelectChangeEvent<unknown>) => {
 		const selected = menuLinks.find(({ title }) => title === e.target.value);
 		setMenuLink(selected || null);
 	};

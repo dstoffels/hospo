@@ -2,7 +2,7 @@
 
 import { setUser } from '@/app/actions';
 import { User } from '@/app/types';
-import { Autocomplete, Button, createFilterOptions, TextField, Typography } from '@mui/material';
+import { Autocomplete, createFilterOptions, TextField, Typography } from '@mui/material';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { v4 } from 'uuid';
@@ -14,7 +14,6 @@ export type UserSelectProps = {
 };
 
 const UserSelect: React.FC<UserSelectProps> = ({ sessionId, users, user }) => {
-	const [anchor, setAnchor] = useState<HTMLButtonElement | null>(null);
 	const [showSelect, setShowSelect] = useState(!Boolean(user));
 	const [selectedUser, setSelectedUser] = useState<User | null>(user || null);
 
@@ -31,8 +30,7 @@ const UserSelect: React.FC<UserSelectProps> = ({ sessionId, users, user }) => {
 		if (newVal) {
 			if (newVal.inputValue) {
 				// create new user
-				const { inputValue, ...props } = newVal;
-				const newUser = { ...props, name: newVal.inputValue };
+				const newUser = { ...newVal, name: newVal.inputValue };
 				setSelectedUser(newUser);
 			} else {
 				// select existing user
@@ -52,7 +50,7 @@ const UserSelect: React.FC<UserSelectProps> = ({ sessionId, users, user }) => {
 				)
 			) : (
 				<Typography variant="caption" color="error">
-					Ope, I don't recognize this device, select or add your name below.
+					Ope, device not recognized, select or add your name below.
 				</Typography>
 			)}
 

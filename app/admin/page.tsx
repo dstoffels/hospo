@@ -2,13 +2,8 @@ import * as React from 'react';
 import { Paper, Stack } from '@mui/material';
 import { auth } from '@/utils/auth';
 import { redirect } from 'next/navigation';
-import OrderTable from '@/components/OrderTable';
-// import MenuLinkField from '@/components/lib/MenuLinkField';
 import ResetBtn from '@/components/lib/ResetBtn';
-import MessageField from '@/components/lib/MessageField';
-
 import Page from '@/components/Page';
-import LinkSwitch from '@/components/lib/LinkSwitch';
 import OrderingSwitch from '@/components/lib/OrderingSwitch';
 import { fetchFoodDB } from '@/utils/db';
 import MenuLinks from '@/components/MenuLinks';
