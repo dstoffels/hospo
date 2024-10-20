@@ -1,10 +1,10 @@
-import { order } from '@/app/types';
+import { Order } from '@/app/types';
 import * as React from 'react';
 import { Paper, Table, TableBody, TableContainer, Typography } from '@mui/material';
-import OrderRow from './lib/OrderRow';
+import OrderRow from './OrderRow';
 
 export type OrderTableProps = {
-	orders: order[];
+	orders: Order[];
 	heading?: string;
 };
 
@@ -16,7 +16,7 @@ const OrderTable: React.FC<OrderTableProps> = async ({ orders, heading }) => {
 			<div>
 				<Typography variant="h6">{heading}</Typography>
 				<TableContainer component={Paper} elevation={12} className="bg-gray-100">
-					<Table>
+					<Table size="small" padding="none">
 						<TableBody>{rows}</TableBody>
 					</Table>
 				</TableContainer>

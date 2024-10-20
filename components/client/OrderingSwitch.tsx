@@ -1,21 +1,20 @@
 'use client';
 
-import { toggleOpen } from '@/app/admin/actions';
-import { DB } from '@/app/types';
+import { toggleOrdering } from '@/app/admin/actions';
 import { Switch, Typography } from '@mui/material';
 import * as React from 'react';
 
 export type OpenSwitchProps = {
-	db: DB;
+	checked: boolean;
 };
 
-const OpenSwitch: React.FC<OpenSwitchProps> = ({ db }) => {
+const OrderingSwitch: React.FC<OpenSwitchProps> = ({ checked }) => {
 	return (
 		<div className="flex justify-between">
 			<Typography variant="overline">Individual Ordering</Typography>
-			<Switch size="medium" checked={db.open} onClick={() => toggleOpen()} />
+			<Switch size="medium" checked={checked} onClick={() => toggleOrdering()} />
 		</div>
 	);
 };
 
-export default OpenSwitch;
+export default OrderingSwitch;

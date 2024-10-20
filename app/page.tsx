@@ -1,58 +1,39 @@
-import { fetchDB } from './actions';
-import SiteIframe from '@/components/SiteIframe';
-import OrderModal from '@/components/OrderModal';
-import { getTokens } from '@/utils/cookies';
-import { Button, Paper, Stack, Typography } from '@mui/material';
-import { Add } from '@mui/icons-material';
-import OrderTable from '@/components/OrderTable';
-import Page from '@/components/Page';
+import Column from '@/components/server/Column';
+import Page from '@/components/server/Page';
+import UserSelect from '@/components/client/UserSelect';
+import { auth } from '@/utils/auth';
+import { fetchBusDB, fetchMainDB } from '@/utils/db';
+import { Paper, Typography } from '@mui/material';
+import BusSelect from '@/components/client/BusSelect';
 
-export default async function AftershowPage({}) {
-	const { sessionId } = getTokens();
+export default async function HomePage({}) {
+	const { message, users } = await fetchMainDB();
 
-	const db = await fetchDB();
+	const { buses } = await fetchBusDB();
 
-	const validateIframe = async () => {
-		'use server';
-		if (db.menu_link) {
-			try {
-				const res = await fetch(db.menu_link, { method: 'HEAD' });
-				return !Boolean(res.headers.get('content-security-policy')?.includes('frame-ancestors'));
-			} catch (error) {
-				console.log('fetch error', error);
-				return false;
-			}
-		}
-		return false;
-	};
+	const { sessionId } = await auth();
 
-	const canFrameSite = await validateIframe();
-
-	const orders = db.orders.filter((o) => o.token === sessionId);
+	const user = users.find((u) => u.sessions.includes(sessionId)) || null;
 
 	return (
-		<Page>
-			<Paper elevation={4} className="p-2 bg-slate-300">
-				<Stack spacing={1}>
-					{db.menu_link && db.open && (
-						<>
-							<OrderTable heading="My Items" orders={orders} />
-							<OrderModal btnTxt="Add Order" token={sessionId as string}>
-								<Button variant="contained" color="primary" size="large" className="w-full">
-									<span>Add Your Order </span>
-									<Add />
-								</Button>
-							</OrderModal>
-						</>
-					)}
-					{db.message && (
-						<Typography variant="body1" fontWeight={600} color="error">
-							{db.message}
-						</Typography>
-					)}
-				</Stack>
-			</Paper>
-			<SiteIframe db={db} canFrameSite={canFrameSite} />
+		<Page className="flex flex-col flex-grow">
+			<Column className="space-y-2">
+				{user && <Typography variant="h4">Hi {user.name}!</Typography>}
+				<UserSelect sessionId={sessionId} users={users} user={user} />
+				{!user?.busId && (
+					<div>
+						<div className="mb-1">
+							<Typography color="warning" variant="caption">
+								Select the bus you ride
+							</Typography>
+						</div>
+						<BusSelect buses={buses} user={user} />
+					</div>
+				)}
+				<Paper elevation={2} className="p-1">
+					<Typography color="textDisabled">{message}</Typography>
+				</Paper>
+			</Column>
 		</Page>
 	);
 }
