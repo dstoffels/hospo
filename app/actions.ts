@@ -1,75 +1,35 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { DB } from './types';
-import { addDoc, collection, doc, getDocs, updateDoc } from 'firebase/firestore';
-import { db } from '@/firebaseConfig';
-import { v4 } from 'uuid';
+import { MainDB, User } from './types';
+import { fetchMainDB, setDB } from '@/utils/db';
 
-export async function fetchDB() {
-	const c = collection(db, 'aftershow');
+export async function setUser(user: User, sessionId: string) {
+	await mainDbSetter((db) => {
+		// clear sessionId from all users
+		db.users.forEach(({ sessions }) => {
+			const i = sessions.findIndex((sid) => sid === sessionId);
+			if (i > -1) sessions.splice(i, 1);
+		});
 
-	try {
-		const snap = await getDocs(c);
-		const dataDoc = snap.docs[0];
+		const i = db.users.findIndex(({ id }) => id === user.id);
 
-		// Auto init db
-		if (!dataDoc) {
-			await addDoc(c, { menu_link: '', orders: [], message: '', open: false });
-			return await fetchDB();
-		}
-
-		return { ...dataDoc.data(), id: dataDoc.id } as DB;
-	} catch {
-		return await fetchDB();
-	}
+		if (i > -1) db.users[i] = user;
+		else db.users.push(user);
+	});
 }
 
-export async function setDB(rawDB: DB) {
-	const dataDoc = doc(db, `aftershow/${rawDB.id}`);
-	await updateDoc(dataDoc, rawDB);
-	await fetchDB();
-	revalidatePath('');
+export async function setUserBus(user: User, busId: string) {
+	await mainDbSetter((db) => {
+		const i = db.users.findIndex(({ id }) => id === user.id);
+		db.users[i].busId = busId;
+	});
 }
 
-// export async function resetDB() {
-// 	const rawDB = await fetchDB();
-// 	const dataDoc = doc(db, `db/${rawDB.id}`);
-// 	await deleteDoc(dataDoc);
-// 	await fetchDB();
-// 	revalidatePath('');
-// }
+async function mainDbSetter(cb: (db: MainDB) => void) {
+	const db = await fetchMainDB();
+	cb(db);
 
-export async function refresh() {
-	revalidatePath('', 'page');
-}
-
-export async function submitOrder(formData: FormData) {
-	const name = formData.get('name') as string;
-	const order = formData.get('order') as string;
-	const token = formData.get('token') as string;
-	const id = (formData.get('id') as string) || v4();
-
-	const db = await fetchDB();
-
-	const i = db.orders.findIndex((order) => order.id === id);
-	const newOrder = { name, order, token, completed: false, id };
-
-	if (i > -1) db.orders[i] = newOrder;
-	else db.orders.push(newOrder);
-
-	await setDB(db);
-	await fetchDB();
-	revalidatePath('');
-}
-
-export async function deleteOrder(orderId: string) {
-	const db = await fetchDB();
-
-	const i = db.orders.findIndex((o) => o.id === orderId);
-
-	db.orders.splice(i, 1);
-
-	await setDB(db);
+	await setDB('main', db);
 	revalidatePath('');
 }

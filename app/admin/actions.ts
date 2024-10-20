@@ -1,57 +1,81 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { fetchDB, setDB } from '../actions';
-import { order } from '../types';
+import { FoodDB, MenuLinkType } from '../types';
+import { fetchFoodDB, setDB } from '@/utils/db';
+import * as cheerio from 'cheerio';
 
-export async function completeOrder(order: order) {
-	const db = await fetchDB();
+export async function toggleOrdering() {
+	await setFoodDB((db) => (db.open = !db.open));
+}
 
-	const i = db.orders.findIndex(({ id }) => id === order.id);
+export async function newMenuLink() {
+	await setFoodDB((db) =>
+		db.menuLinks.push({
+			url: '',
+			useIframe: true,
+			title: '',
+			description: '',
+			thumbnail: '',
+			favicon: '',
+		}),
+	);
+}
 
-	db.orders[i].completed = !db.orders[i].completed;
+export async function updateMenuLink(menuLink: MenuLinkType, i: number) {
+	await setFoodDB(async (db) => {
+		if (!menuLink.title || menuLink.url !== db.menuLinks[i].url) {
+			const meta = await fetchMeta(menuLink.url);
+			menuLink = { ...menuLink, ...meta };
+		}
 
-	await setDB(db);
+		if (!menuLink.title) menuLink.title = menuLink.url;
+
+		db.menuLinks[i] = menuLink;
+	});
+}
+
+export async function deleteMenuLink(i: number) {
+	await setFoodDB((db) => db.menuLinks.splice(i, 1));
+}
+
+export async function resetFoodOrders() {
+	await setFoodDB((db) => (db.orders = []));
+}
+
+export async function setFoodDB(cb: (db: FoodDB) => void) {
+	const db = await fetchFoodDB();
+	cb(db);
+	await setDB('food', db);
 	revalidatePath('');
 }
 
-export async function updateMenuLink(menuLink: string) {
-	const db = await fetchDB();
+async function fetchMeta(url: string) {
+	try {
+		const response = await fetch(url);
+		const html = await response.text();
 
-	db.menu_link = menuLink;
+		const $ = cheerio.load(html);
 
-	await setDB(db);
-	revalidatePath('');
-}
+		const title = $('meta[property="og:title"]').attr('content') || $('title').text() || '';
+		const description = $('meta[property="og:description"]').attr('content') || '';
+		const thumbnail = $('meta[property=og:image]').attr('content') || '';
 
-export async function updateMsg(message: string) {
-	const db = await fetchDB();
+		// Extract favicon
+		let favicon =
+			$('link[rel="icon"]').attr('href') ||
+			$('link[rel="shortcut icon"]').attr('href') ||
+			$('link[rel="apple-touch-icon"]').attr('href') ||
+			'';
 
-	db.message = message;
+		// Ensure absolute URL for the favicon if it’s relative
+		if (favicon && !favicon.startsWith('http')) {
+			const baseUrl = new URL(url).origin;
+			favicon = baseUrl + favicon;
+		}
 
-	await setDB(db);
-	revalidatePath('');
-}
-
-export async function toggleOpen() {
-	const db = await fetchDB();
-
-	db.open = !db.open;
-	await setDB(db);
-	revalidatePath('');
-}
-
-export async function toggleLink() {
-	const db = await fetchDB();
-
-	db.useLink = !db.useLink;
-	await setDB(db);
-	revalidatePath('');
-}
-
-export async function resetDB() {
-	const db = await fetchDB();
-	db.orders = [];
-	await setDB(db);
-	revalidatePath('');
+		return { title, description, thumbnail, favicon };
+	} catch {
+		return { title: '', description: '', thumbnail: '', favicon: '' };
+	}
 }

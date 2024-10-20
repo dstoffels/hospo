@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import Image from 'next/image';
-import { Typography } from '@mui/material';
-import NavLink from '@/components/lib/NavLink';
+import Nav from '@/components/client/Nav';
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
+import Header from '@/components/server/Header';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import theme from '@/utils/theme';
+import { auth } from '@/utils/auth';
 
 const geistSans = localFont({
 	src: './fonts/GeistVF.woff',
@@ -21,28 +24,26 @@ export const metadata: Metadata = {
 	description: 'Created by Dan-O',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const { user } = await auth();
+
 	return (
 		<html lang="en">
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
 			>
-				<header>
-					<div className="flex items-center">
-						<Image src="/images/elle-king-logo.png" width={250} height={250} alt="logo" priority />
-						<Typography variant="h5">Hospice</Typography>
-					</div>
-					<nav className="flex justify-around pb-2 px-1">
-						<NavLink href="/">Aftershow</NavLink>
-						<NavLink href="/busstock">Bus Stock</NavLink>
-						<NavLink href="/admin">Admin</NavLink>
-					</nav>
-				</header>
-				<main className="flex-grow flex flex-col h-full">{children}</main>
+				<AppRouterCacheProvider>
+					<ThemeProvider theme={theme}>
+						<CssBaseline />
+						<Header />
+						<main className="flex-grow flex flex-col h-full">{children}</main>
+						<Nav user={user} />
+					</ThemeProvider>
+				</AppRouterCacheProvider>
 			</body>
 		</html>
 	);
