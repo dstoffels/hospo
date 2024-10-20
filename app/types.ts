@@ -25,10 +25,11 @@ export type Model = {
 };
 export type User = Model & {
 	sessions: string[];
+	busId: string;
 };
 
 export type Bus = Model & {
-	stock: Order[];
+	stock: StockItemType[];
 };
 
 export type Order = {
@@ -36,6 +37,12 @@ export type Order = {
 	user: User;
 	order: string;
 	fulfilled: boolean;
+};
+
+export type StockItemType = {
+	id: string;
+	user: User;
+	item: string;
 };
 
 export type MenuLinkType = {

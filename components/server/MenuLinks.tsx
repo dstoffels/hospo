@@ -1,7 +1,7 @@
 import { fetchFoodDB } from '@/utils/db';
 import * as React from 'react';
-import MenuLink from './lib/MenuLink';
-import NewMenuLinkBtn from './lib/NewMenuLinkBtn';
+import MenuLink from '../client/MenuLink';
+import NewMenuLinkBtn from '../client/NewMenuLinkBtn';
 import { Typography } from '@mui/material';
 
 export type MenuLinksProps = object;

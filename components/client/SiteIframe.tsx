@@ -6,9 +6,9 @@ import * as React from 'react';
 import { useState } from 'react';
 
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import Panel from './lib/Panel';
-import MenuSelect from './lib/MenuSelect';
-import Column from './lib/Column';
+import Panel from '../server/Panel';
+import MenuSelect from './MenuSelect';
+import Column from '../server/Column';
 
 export type SiteIframeProps = {
 	menuLinks: MenuLinkType[];
@@ -16,6 +16,8 @@ export type SiteIframeProps = {
 
 const SiteIframe: React.FC<SiteIframeProps> = ({ menuLinks }) => {
 	const [menuLink, setMenuLink] = useState<MenuLinkType | null>(menuLinks[0] || null);
+
+	const iframeRef = React.useRef<HTMLIFrameElement>(null);
 
 	const handleChange = (e: SelectChangeEvent<unknown>) => {
 		const selected = menuLinks.find(({ title }) => title === e.target.value);
@@ -27,8 +29,9 @@ const SiteIframe: React.FC<SiteIframeProps> = ({ menuLinks }) => {
 			<MenuSelect value={menuLink?.title} menuLinks={menuLinks} onChange={handleChange} />
 			{menuLink?.useIframe ? (
 				<iframe
+					ref={iframeRef}
 					id="menu-iframe"
-					src={menuLink.url + '?nocache=' + Date.now()}
+					src={menuLink.url}
 					className="flex-grow relative"
 					sandbox="allow-scripts allow-same-origin allow-modals allow-top-navigation-by-user-activation allow-popups allow-popups-to-escape-sandbox"
 				></iframe>

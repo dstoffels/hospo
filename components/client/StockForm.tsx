@@ -1,54 +1,56 @@
 'use client';
 
-import { Order, User } from '@/app/types';
+import { addStock, deleteStock, updateStock } from '@/app/busstock/actions';
+import { StockItemType, User } from '@/app/types';
 import { Button, ButtonProps, IconButton, Popover, Stack, TextField } from '@mui/material';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import UserSelect from './UserSelect';
 import { v4 } from 'uuid';
-import { deleteOrder, placeOrder, updateOrder } from '@/app/actions';
+import UserSelect from './UserSelect';
 import { Delete } from '@mui/icons-material';
 
-export type OrderFormProps = {
-	user: User | undefined;
+export type StockFormProps = {
+	busId: string;
+	user: User | null;
 	users: User[];
 	sessionId: string;
-	existingOrder?: Order;
+	existingItem?: StockItemType;
 	MainButton: React.FC<ButtonProps>;
 	className?: string;
 };
 
-const OrderForm: React.FC<OrderFormProps> = ({
+const StockForm: React.FC<StockFormProps> = ({
+	busId,
 	user,
 	users,
 	sessionId,
-	existingOrder,
+	existingItem,
 	MainButton,
 	className = '',
 }) => {
 	const [anchor, setAnchor] = useState<HTMLButtonElement | null>(null);
-	const [order, setOrder] = useState(existingOrder?.order || '');
+	const [item, setItem] = useState(existingItem?.item || '');
 	const open = Boolean(anchor);
 
 	useEffect(() => {
-		if (existingOrder && order !== existingOrder?.order) setOrder(existingOrder.order);
-	}, [existingOrder]);
+		if (existingItem && item !== existingItem?.item) setItem(existingItem.item);
+	}, [existingItem]);
 
 	const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => setAnchor(e.currentTarget);
 
 	const handleClose = () => setAnchor(null);
 
 	const handleSubmit = async () => {
-		if (existingOrder) await updateOrder({ ...existingOrder, order });
-		else await placeOrder({ id: v4(), user, fulfilled: false, order } as Order);
-		setOrder('');
+		if (existingItem) await updateStock(busId, { ...existingItem, item });
+		else await addStock(busId, { id: v4(), user, item } as StockItemType);
+		setItem('');
 		handleClose();
 	};
 
 	return (
 		<div className={`flex justify-center w-full items-center ${className}`}>
-			<MainButton variant="contained" fullWidth color="error" onClick={handleClick}>
-				Place Order
+			<MainButton variant="contained" className="w-full" color="error" onClick={handleClick}>
+				Add Bus Stock
 			</MainButton>
 			<Popover
 				open={open}
@@ -62,18 +64,18 @@ const OrderForm: React.FC<OrderFormProps> = ({
 				<form action={handleSubmit} className="p-2 w-full">
 					<Stack spacing={1}>
 						<TextField
-							label={`${user?.name}'s Order`}
+							label={`Stock item for ${user?.name}`}
 							name="order"
 							multiline
 							fullWidth
 							variant="standard"
-							value={order}
-							onChange={(e) => setOrder(e.target.value)}
+							value={item}
+							onChange={(e) => setItem(e.target.value)}
 						/>
 						<div className="flex justify-between items-center">
 							<UserSelect user={user} users={users} sessionId={sessionId} />
-							{existingOrder && (
-								<IconButton onClick={() => deleteOrder(existingOrder)} color="error">
+							{existingItem && (
+								<IconButton onClick={() => deleteStock(existingItem.id)} color="error">
 									<Delete />
 								</IconButton>
 							)}
@@ -82,7 +84,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
 							<Button onClick={handleClose} color="error">
 								Cancel
 							</Button>
-							<Button type="submit">{existingOrder ? 'Update' : 'Place'} Order</Button>
+							<Button type="submit">{existingItem ? 'Update' : 'Add'} Item</Button>
 						</div>
 					</Stack>
 				</form>
@@ -91,4 +93,4 @@ const OrderForm: React.FC<OrderFormProps> = ({
 	);
 };
 
-export default OrderForm;
+export default StockForm;

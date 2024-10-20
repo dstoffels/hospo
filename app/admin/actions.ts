@@ -1,88 +1,54 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { MenuLinkType } from '../types';
+import { FoodDB, MenuLinkType } from '../types';
 import { fetchFoodDB, setDB } from '@/utils/db';
 import * as cheerio from 'cheerio';
 
-// export async function completeOrder(order: Order) {
-// 	const db = await fetchDB();
-
-// 	const i = db.orders.findIndex(({ id }) => id === order.id);
-
-// 	db.orders[i].completed = !db.orders[i].completed;
-
-// 	await setDB(db);
-// 	revalidatePath('');
-// }
-
-// export async function updateMsg(message: string) {
-// 	const db = await fetchDB();
-
-// 	db.message = message;
-
-// 	await setDB(db);
-// 	revalidatePath('');
-// }
-
 export async function toggleOrdering() {
-	const db = await fetchFoodDB();
-
-	db.open = !db.open;
-	await setDB('food', db);
-	revalidatePath('');
+	await setFoodDB((db) => (db.open = !db.open));
 }
 
 export async function newMenuLink() {
-	const db = await fetchFoodDB();
-	db.menuLinks.push({
-		url: '',
-		useIframe: true,
-		title: '',
-		description: '',
-		thumbnail: '',
-		favicon: '',
-	});
-	await setDB('food', db);
-	revalidatePath('');
+	await setFoodDB((db) =>
+		db.menuLinks.push({
+			url: '',
+			useIframe: true,
+			title: '',
+			description: '',
+			thumbnail: '',
+			favicon: '',
+		}),
+	);
 }
 
 export async function updateMenuLink(menuLink: MenuLinkType, i: number) {
-	const db = await fetchFoodDB();
+	await setFoodDB(async (db) => {
+		if (!menuLink.title || menuLink.url !== db.menuLinks[i].url) {
+			const meta = await fetchMeta(menuLink.url);
+			menuLink = { ...menuLink, ...meta };
+		}
 
-	if (!menuLink.title || menuLink.url !== db.menuLinks[i].url) {
-		const meta = await fetchMeta(menuLink.url);
-		menuLink = { ...menuLink, ...meta };
-	}
+		if (!menuLink.title) menuLink.title = menuLink.url;
 
-	if (!menuLink.title) menuLink.title = menuLink.url;
-
-	db.menuLinks[i] = menuLink;
-	await setDB('food', db);
-	revalidatePath('');
+		db.menuLinks[i] = menuLink;
+	});
 }
 
 export async function deleteMenuLink(i: number) {
+	await setFoodDB((db) => db.menuLinks.splice(i, 1));
+}
+
+export async function resetFoodOrders() {
+	await setFoodDB((db) => (db.orders = []));
+}
+
+export async function setFoodDB(cb: (db: FoodDB) => void) {
 	const db = await fetchFoodDB();
-	db.menuLinks.splice(i, 1);
+	cb(db);
 	await setDB('food', db);
 	revalidatePath('');
 }
-
-// export async function toggleLink() {
-// 	const db = await fetchDB();
-
-// 	db.useLink = !db.useLink;
-// 	await setDB(db);
-// 	revalidatePath('');
-// }
-
-// export async function resetDB() {
-// 	const db = await fetchDB();
-// 	db.orders = [];
-// 	await setDB(db);
-// 	revalidatePath('');
-// }
 
 async function fetchMeta(url: string) {
 	try {

@@ -1,12 +1,12 @@
-import OrderForm from '@/components/OrderForm';
-import Page from '@/components/Page';
-import SiteIframe from '@/components/SiteIframe';
+import OrderForm from '@/components/client/OrderForm';
+import Page from '@/components/server/Page';
+import SiteIframe from '@/components/client/SiteIframe';
 import { auth } from '@/utils/auth';
 import { fetchFoodDB, fetchMainDB } from '@/utils/db';
 import * as React from 'react';
 import { User } from '../types';
 import { Button, Typography } from '@mui/material';
-import OrderTable from '@/components/OrderTable';
+import OrderTable from '@/components/server/OrderTable';
 
 export type FoodPageProps = object;
 
@@ -20,7 +20,11 @@ const FoodPage: React.FC<FoodPageProps> = async ({}) => {
 
 	return (
 		<Page>
-			<Typography>{foodDB.message}</Typography>
+			<div className="mb-2">
+				<Typography color="warning" variant="body2" lineHeight={1.1}>
+					{foodDB.message}
+				</Typography>
+			</div>
 			<SiteIframe menuLinks={foodDB.menuLinks} />
 			<OrderForm
 				user={user as User}
@@ -28,6 +32,7 @@ const FoodPage: React.FC<FoodPageProps> = async ({}) => {
 				sessionId={sessionId}
 				MainButton={Button}
 				className="my-1"
+				show={foodDB.open}
 			/>
 			<OrderTable orders={orders} />
 		</Page>

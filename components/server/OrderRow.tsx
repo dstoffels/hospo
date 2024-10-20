@@ -1,10 +1,10 @@
 import { Order, User } from '@/app/types';
 import * as React from 'react';
 import { TableCell, TableRow, Typography } from '@mui/material';
-import CompleteCheckbox from './CompleteCheckbox';
+import CompleteCheckbox from '../client/CompleteCheckbox';
 import { auth } from '@/utils/auth';
-import OrderForm from '../OrderForm';
-import EditBtn from './EditBtn';
+import OrderForm from '../client/OrderForm';
+import EditBtn from '../client/EditBtn';
 import { fetchMainDB } from '@/utils/db';
 
 export type OrderRowProps = {
@@ -13,14 +13,13 @@ export type OrderRowProps = {
 };
 
 const OrderRow: React.FC<OrderRowProps> = async ({ order, i }) => {
-	const { adminToken, sessionId, user } = await auth();
-	const isAdmin = adminToken === process.env.TOKEN;
+	const { isAdmin, sessionId, user } = await auth();
 	const isOwner = user?.id === order.user.id;
 
 	const { users } = await fetchMainDB();
 
 	return (
-		<TableRow key={order.id} className="">
+		<TableRow>
 			{isAdmin && (
 				<TableCell align="left" padding="checkbox">
 					<Typography>{i + 1}</Typography>
@@ -40,6 +39,7 @@ const OrderRow: React.FC<OrderRowProps> = async ({ order, i }) => {
 						user={user as User}
 						users={users}
 						existingOrder={order}
+						show
 					/>
 				</TableCell>
 			)}

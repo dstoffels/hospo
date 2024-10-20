@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import Nav from '@/components/Nav';
+import Nav from '@/components/client/Nav';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
-import Header from '@/components/Header';
+import Header from '@/components/server/Header';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import theme from '@/utils/theme';
 import { auth } from '@/utils/auth';

@@ -11,8 +11,10 @@ export const auth = async () => {
 	const sessionId = cookieStore.get('session')?.value as string;
 	const adminToken = cookieStore.get('admin')?.value;
 
+	const isAdmin = adminToken === process.env.TOKEN;
+
 	const db = await fetchMainDB();
 	const user = db.users.find(({ sessions }) => sessions.includes(sessionId)) || null;
 
-	return { sessionId, adminToken, user };
+	return { sessionId, adminToken, user, isAdmin };
 };

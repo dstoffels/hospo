@@ -10,7 +10,7 @@ import { v4 } from 'uuid';
 export type UserSelectProps = {
 	sessionId: string;
 	users: User[];
-	user: User | undefined;
+	user: User | null;
 };
 
 const UserSelect: React.FC<UserSelectProps> = ({ sessionId, users, user }) => {
@@ -41,7 +41,7 @@ const UserSelect: React.FC<UserSelectProps> = ({ sessionId, users, user }) => {
 	};
 
 	return (
-		<div>
+		<div className="w-full">
 			{user ? (
 				!showSelect && (
 					<Typography onClick={() => setShowSelect(true)} color="primary" variant="caption">
@@ -56,6 +56,7 @@ const UserSelect: React.FC<UserSelectProps> = ({ sessionId, users, user }) => {
 
 			{showSelect && (
 				<Autocomplete
+					fullWidth
 					options={users}
 					value={selectedUser}
 					onChange={handleChange}
@@ -70,12 +71,15 @@ const UserSelect: React.FC<UserSelectProps> = ({ sessionId, users, user }) => {
 								name: `Add "${params.inputValue}"`,
 								sessions: [sessionId],
 								inputValue: params.inputValue,
+								busId: '',
 							});
 						}
 
 						return filtered;
 					}}
-					renderInput={(params) => <TextField {...params} variant="standard" label="Name" />}
+					renderInput={(params) => (
+						<TextField {...params} fullWidth variant="standard" label="Name" />
+					)}
 				/>
 			)}
 		</div>

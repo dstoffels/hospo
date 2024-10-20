@@ -15,7 +15,7 @@ const Nav: React.FC<NavProps> = ({ user }) => {
 		redirect('/');
 	}
 	return (
-		<Paper elevation={24} square variant="outlined">
+		<Paper elevation={24} square variant="outlined" className="fixed w-full bottom-0">
 			<BottomNavigation value={path} showLabels>
 				<BottomNavigationAction
 					disabled={path === '/food'}

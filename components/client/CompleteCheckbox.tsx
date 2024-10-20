@@ -1,6 +1,6 @@
 'use client';
 
-import { fulfillOrder } from '@/app/actions';
+import { fulfillOrder } from '@/app/food/actions';
 import { Order } from '@/app/types';
 import { Checkbox } from '@mui/material';
 import * as React from 'react';

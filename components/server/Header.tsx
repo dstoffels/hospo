@@ -1,7 +1,6 @@
 import { Paper, Typography } from '@mui/material';
 import Image from 'next/image';
 import * as React from 'react';
-// import NavLink from './lib/NavLink';
 import Link from 'next/link';
 
 export type HeaderProps = object;

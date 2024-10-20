@@ -1,7 +1,7 @@
 import { Order } from '@/app/types';
 import * as React from 'react';
 import { Paper, Table, TableBody, TableContainer, Typography } from '@mui/material';
-import OrderRow from './lib/OrderRow';
+import OrderRow from './OrderRow';
 
 export type OrderTableProps = {
 	orders: Order[];
