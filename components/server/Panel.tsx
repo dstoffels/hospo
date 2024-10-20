@@ -6,7 +6,7 @@ export type PanelProps = React.PropsWithChildren & {
 	elevation?: number;
 };
 
-const Panel: React.FC<PanelProps> = ({ children, className, elevation = 2 }) => {
+const Panel: React.FC<PanelProps> = ({ children, className, elevation = 4 }) => {
 	return (
 		<Paper elevation={elevation} className={'p-2 max-w-xl w-full ' + className}>
 			{children}

@@ -2,8 +2,15 @@
 
 import { revalidatePath } from 'next/cache';
 import { FoodDB, MenuLinkType } from '../types';
-import { fetchFoodDB, setDB } from '@/utils/db';
+import { fetchFoodDB, fetchMainDB, setDB } from '@/utils/db';
 import * as cheerio from 'cheerio';
+
+export async function updateMainMsg(message: string) {
+	const db = await fetchMainDB();
+	db.message = message;
+	setDB('main', db);
+	revalidatePath('');
+}
 
 export async function toggleOrdering() {
 	await setFoodDB((db) => (db.open = !db.open));

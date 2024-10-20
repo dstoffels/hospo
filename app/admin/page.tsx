@@ -5,12 +5,14 @@ import { redirect } from 'next/navigation';
 import ResetBtn from '@/components/client/ResetBtn';
 import Page from '@/components/server/Page';
 import OrderingSwitch from '@/components/client/OrderingSwitch';
-import { fetchFoodDB } from '@/utils/db';
+import { fetchFoodDB, fetchMainDB } from '@/utils/db';
 import MenuLinks from '@/components/server/MenuLinks';
 import OrderTable from '@/components/server/OrderTable';
 import Buses from '@/components/server/Buses';
 import MessageField from '@/components/client/MessageField';
 import { updateFoodMsg } from '../food/actions';
+import Panel from '@/components/server/Panel';
+import { updateMainMsg } from './actions';
 
 export type AdminPageProps = object;
 
@@ -21,37 +23,44 @@ const AdminPage: React.FC<AdminPageProps> = async ({}) => {
 		redirect('/login');
 	}
 
-	const db = await fetchFoodDB();
+	const mainDB = await fetchMainDB();
+	const foodDB = await fetchFoodDB();
 
 	return (
 		<Page>
-			<Paper className="p-2 mb-2">
+			<Panel className="mb-2 ">
+				<Typography color="primary" variant="overline" fontSize={18} textAlign="center">
+					Main
+				</Typography>
+				<MessageField db={mainDB} onChange={updateMainMsg} />
+			</Panel>
+			<Panel className="p-2 mb-2">
 				<Typography color="primary" variant="overline" fontSize={18} textAlign="center">
 					Food
 				</Typography>
 				<Stack spacing={2}>
-					<OrderingSwitch checked={db.open} />
+					<MessageField db={foodDB} onChange={updateFoodMsg} />
+					<OrderingSwitch checked={foodDB.open} />
 					<MenuLinks />
-					<MessageField db={db} onChange={updateFoodMsg} />
 				</Stack>
-			</Paper>
-			{db.orders.length > 0 && (
+			</Panel>
+			{foodDB.orders.length > 0 && (
 				<div className="mb-2">
-					<OrderTable orders={db.orders} />
+					<OrderTable orders={foodDB.orders} />
 				</div>
 			)}
-			<Paper className="p-2 mb-2">
+			<Panel className="p-2 mb-2">
 				<Typography color="primary" variant="overline" fontSize={18} textAlign="center">
 					Bus Stock
 				</Typography>
 				<Buses />
-			</Paper>
-			<Paper className="p-2">
+			</Panel>
+			<Panel className="p-2">
 				<Typography color="error" variant="overline" fontSize={18} textAlign="center">
 					DANGER ZONE
 				</Typography>
 				<ResetBtn />
-			</Paper>
+			</Panel>
 		</Page>
 	);
 };

@@ -1,13 +1,13 @@
 'use client';
 
-import { FoodDB } from '@/app/types';
+import { BusStockDB, FoodDB, MainDB } from '@/app/types';
 import { Close } from '@mui/icons-material';
 import { CircularProgress, IconButton, InputAdornment, TextField } from '@mui/material';
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 
 export type MessageFieldProps = {
-	db: FoodDB;
+	db: FoodDB | MainDB | BusStockDB;
 	onChange: (message: string) => Promise<void>;
 };
 
@@ -34,6 +34,7 @@ const MessageField: React.FC<MessageFieldProps> = ({ db, onChange }) => {
 	};
 	return (
 		<TextField
+			fullWidth
 			value={message}
 			onChange={handleChange}
 			name="message"
