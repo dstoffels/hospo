@@ -1,8 +1,6 @@
 'use client';
 
 import { toggleOrdering } from '@/app/admin/actions';
-// import { toggleOpen } from '@/app/admin/actions';
-// import { DB } from '@/app/types';
 import { Switch, Typography } from '@mui/material';
 import * as React from 'react';
 

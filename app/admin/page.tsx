@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Paper, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { auth } from '@/utils/auth';
 import { redirect } from 'next/navigation';
 import ResetBtn from '@/components/client/ResetBtn';
