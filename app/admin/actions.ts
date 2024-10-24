@@ -25,7 +25,7 @@ export async function newMenuLink() {
 			description: '',
 			thumbnail: '',
 			favicon: '',
-		}),
+		} as MenuLinkType),
 	);
 }
 
@@ -34,6 +34,7 @@ export async function updateMenuLink(menuLink: MenuLinkType, i: number) {
 		if (!menuLink.title || menuLink.url !== db.menuLinks[i].url) {
 			const meta = await fetchMeta(menuLink.url);
 			menuLink = { ...menuLink, ...meta };
+			console.log(menuLink);
 		}
 
 		if (!menuLink.title) menuLink.title = menuLink.url;
@@ -52,7 +53,7 @@ export async function resetFoodOrders() {
 
 export async function setFoodDB(cb: (db: FoodDB) => void) {
 	const db = await fetchFoodDB();
-	cb(db);
+	await cb(db);
 	await setDB('food', db);
 	revalidatePath('');
 }
@@ -83,6 +84,6 @@ async function fetchMeta(url: string) {
 
 		return { title, description, thumbnail, favicon };
 	} catch {
-		return { title: '', description: '', thumbnail: '', favicon: '' };
+		return { url, title: '', description: '', thumbnail: '', favicon: '' };
 	}
 }
