@@ -3,7 +3,7 @@ import Page from '@/components/server/Page';
 import UserSelect from '@/components/client/UserSelect';
 import { auth } from '@/utils/auth';
 import { fetchBusDB, fetchMainDB } from '@/utils/db';
-import { Paper, Typography } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
 import BusSelect from '@/components/client/BusSelect';
 
 export default async function HomePage({}) {
@@ -17,7 +17,17 @@ export default async function HomePage({}) {
 
 	return (
 		<Page className="flex flex-col flex-grow">
-			<Column className="space-y-2">
+			{message && (
+				<>
+					<div className="mb-4">
+						<Typography whiteSpace="break-spaces" color="">
+							{message}
+						</Typography>
+					</div>
+					<Divider />
+				</>
+			)}
+			<Column className="space-y-2 mt-2">
 				{user && <Typography variant="h4">Hi {user.name}!</Typography>}
 				<UserSelect sessionId={sessionId} users={users} user={user} />
 				{!user?.busId && (
@@ -30,9 +40,6 @@ export default async function HomePage({}) {
 						<BusSelect buses={buses} user={user} />
 					</div>
 				)}
-				<Paper elevation={2} className="p-1">
-					<Typography color="textDisabled">{message}</Typography>
-				</Paper>
 			</Column>
 		</Page>
 	);
