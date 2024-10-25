@@ -50,7 +50,7 @@ const UserSelect: React.FC<UserSelectProps> = ({ sessionId, users, user }) => {
 				)
 			) : (
 				<Typography variant="caption" color="error">
-					Ope, device not recognized, select or add your name below.
+					Select your name from the dropdown, or type it in to add yourself to the list.
 				</Typography>
 			)}
 
