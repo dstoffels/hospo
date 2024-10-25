@@ -3,7 +3,7 @@ import Page from '@/components/server/Page';
 import UserSelect from '@/components/client/UserSelect';
 import { auth } from '@/utils/auth';
 import { fetchBusDB, fetchMainDB } from '@/utils/db';
-import { Divider, Paper, Typography } from '@mui/material';
+import { Divider, Typography } from '@mui/material';
 import BusSelect from '@/components/client/BusSelect';
 
 export default async function HomePage({}) {
