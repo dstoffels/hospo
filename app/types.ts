@@ -52,4 +52,8 @@ export type MenuLinkType = {
 	description: string;
 	favicon: string;
 	thumbnail: string;
+	meal: MealOptions;
 };
+
+export const mealOptions = ['Lunch', 'Dinner', 'Aftershow'] as const;
+export type MealOptions = (typeof mealOptions)[number];

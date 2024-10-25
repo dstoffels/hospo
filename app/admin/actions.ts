@@ -25,6 +25,7 @@ export async function newMenuLink() {
 			description: '',
 			thumbnail: '',
 			favicon: '',
+			meal: 'Aftershow',
 		} as MenuLinkType),
 	);
 }

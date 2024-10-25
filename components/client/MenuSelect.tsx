@@ -1,7 +1,7 @@
 'use client';
 
 import { MenuLinkType } from '@/app/types';
-import { FormControl, InputLabel, MenuItem, Select, SelectProps } from '@mui/material';
+import { FormControl, InputLabel, MenuItem, Select, SelectProps, Typography } from '@mui/material';
 import * as React from 'react';
 
 export type MenuSelectProps = SelectProps & {
@@ -9,11 +9,19 @@ export type MenuSelectProps = SelectProps & {
 };
 
 const MenuSelect: React.FC<MenuSelectProps> = ({ menuLinks, ...props }) => {
-	if (menuLinks.length < 2) return null;
+	if (menuLinks.length === 0) return null;
+	if (menuLinks.length === 1)
+		return (
+			<Typography variant="overline" fontSize={14}>
+				{menuLinks[0].meal}
+			</Typography>
+		);
 
 	const selectOptions = menuLinks.map((ml, i) => (
 		<MenuItem value={ml.title} key={`${i}-${ml.url}`}>
-			<span className="max-w-lg overflow-hidden text-ellipsis">{ml.title}</span>
+			<span className="max-w-lg overflow-hidden text-ellipsis">
+				{ml.meal}: {ml.title}
+			</span>
 		</MenuItem>
 	));
 
