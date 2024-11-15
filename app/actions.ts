@@ -14,6 +14,8 @@ export async function setUser(user: User, sessionId: string) {
 
 		const i = db.users.findIndex(({ id }) => id === user.id);
 
+		user.sessions.push(sessionId);
+
 		if (i > -1) db.users[i] = user;
 		else db.users.push(user);
 	});
