@@ -32,11 +32,11 @@ export default async function HomePage({}) {
 				<UserSelect sessionId={sessionId} users={users} user={user} />
 				{!user?.busId && (
 					<div>
-						<div className="mb-1">
+						{/* <div className="mb-1">
 							<Typography color="warning" variant="caption">
 								Select the bus you ride
 							</Typography>
-						</div>
+						</div> */}
 						<BusSelect buses={buses} user={user} />
 					</div>
 				)}
