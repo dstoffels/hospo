@@ -25,7 +25,6 @@ const FoodPage: React.FC<FoodPageProps> = async ({}) => {
 					{foodDB.message}
 				</Typography>
 			</div>
-			<SiteIframe menuLinks={foodDB.menuLinks} />
 			<OrderForm
 				user={user as User}
 				users={mainDB.users}
@@ -35,6 +34,7 @@ const FoodPage: React.FC<FoodPageProps> = async ({}) => {
 				show={foodDB.open}
 			/>
 			<OrderTable orders={orders} />
+			<SiteIframe menuLinks={foodDB.menuLinks} />
 		</Page>
 	);
 };
